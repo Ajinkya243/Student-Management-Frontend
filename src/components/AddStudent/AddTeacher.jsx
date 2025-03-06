@@ -2,8 +2,7 @@ import Navbar from "../nav/Navbar";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addTeacher, updateTeacher } from "../../utils/redux/slice/teacherSlice";
-import { useLocation } from "react-router-dom";
-import { updateStudent } from "../../utils/redux/slice/studentsSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 const AddTeacher=()=>{
     const location=useLocation();
     const teacherToEdit = location.state ? location.state.teacher : null;
@@ -13,14 +12,24 @@ const AddTeacher=()=>{
         rating:teacherToEdit?teacherToEdit.rating:"",
         gender:teacherToEdit?teacherToEdit.gender:'Male'
     })
+    const navigate=useNavigate();
     const dispatch=useDispatch();
-    const handleSubmit=(event)=>{
+    const handleSubmit=async(event)=>{
         event.preventDefault();
-        dispatch(addTeacher(teacher))
+        const response=await dispatch(addTeacher(teacher));
+        if(response.meta.requestStatus==='fulfilled'){
+            setTeacher({name:"",subject:"",rating:"",gender:""})
+            navigate("/teachers");
+        }
     }
-    const handleUpdate=(event)=>{
+    const handleUpdate=async(event)=>{
         event.preventDefault();
-        dispatch(updateTeacher({...teacher,_id:teacherToEdit._id}))
+        const response=await dispatch(updateTeacher({...teacher,_id:teacherToEdit._id}));
+        if(response.meta.requestStatus==='fulfilled'){
+            setTeacher({name:"",subject:"",rating:"",gender:""});
+            navigate("/teachers");
+        }
+        
     }
     return(
         <>
