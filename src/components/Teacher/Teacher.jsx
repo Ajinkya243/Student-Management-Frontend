@@ -13,6 +13,7 @@ const Teacher=()=>{
         <>
         <Navbar/>
         <div className="container py-5">
+            <h2>Teacher View</h2>
          <Link to="/teachers/add" className="btn btn-warning">Add Teacher</Link>   
         <h2>Teachers List</h2>
         {status==='loading' && <p>Loading...</p>}
